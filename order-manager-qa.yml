@@ -3,7 +3,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongodbdatabase:27018/om-data
+      uri: mongodb://mongodbdatabase:27017/om-data
   cloud:
     stream:
       binders:
