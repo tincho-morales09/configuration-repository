@@ -1,0 +1,15 @@
+server:
+  port: 8080
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongodbdatabase:27017/om-data
+  cloud:
+    stream:
+      binders:
+        rabbit_binder:
+          environment:
+            spring:
+              rabbitmq:
+                host: rabbitmq-oms
+                port: 5672
