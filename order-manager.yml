@@ -1,0 +1,69 @@
+manager:
+  enableChannels:
+    exportSale: true
+    
+  customJms:
+    initialRedeliveryDelay: 1000
+    redeliveryDelay: 1000
+    maximumRedeliveries: 1
+    persistenceDirectoryName: data
+
+  rest:
+    importSaleUrl: /manage/order/sale
+    cancelSaleUrl: /manage/order/return
+    defaultSource: ES
+    defaultPosNumber: 100
+    verification: true
+
+  util:
+    defaultCurrency: 1
+
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/om-data
+  activemq:
+    brokerUrl: tcp://localhost:61616?jms.dispatchAsync=true
+    pool:
+      max-connections: 10
+      enabled: true
+      idle-timeout: 30
+      max-sessions-per-connection: 500
+  jms:
+    listener:
+      concurrency: 5
+      max-concurrency: 5
+      receive-timeout: 1s
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          inputEvents:
+            consumer:
+              republish-to-dlq: true
+      bindings:
+        inputEvents:
+          destination: orderManager
+          binder: rabbit_binder
+          group: orderManager-group
+          consumer:
+            concurrency: 5
+            maxAttempts: 3
+            backOffInitialInterval: 2000
+            backOffMaxInterval: 2000
+        exportSale:
+          destination: exportSale
+          binder: rabbit_binder
+          producer:
+            requiredGroups: exportSale-group
+      binders:
+        rabbit_binder:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
