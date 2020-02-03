@@ -1,0 +1,45 @@
+server:
+  port: 8082
+
+distributor:
+  payments:
+    RECAUDADO:
+      paymentName: CASH
+      paymentId: 1
+      needCreditCardData: false
+    MERPAY:
+      paymentName: GATEWAY
+      paymentId: 35
+      needCreditCardData: true
+    WEBPAY:
+      paymentName: GATEWAY
+      paymentId: 35
+      needCreditCardData: true
+    PAYU:
+      paymentName: GATEWAY
+      paymentId: 35
+      needCreditCardData: true
+      
+  wirelessCardPayment:
+    paymentName: MOBILE_POS_CARD
+    paymentid: 27
+    needCreditCardData: true
+
+  
+  defaultDiscountConfiguration:
+    description: External transaction discount
+    discountId: 9999
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/distributor-data
+  cloud:
+    stream:
+      binders:
+        rabbit_binder:
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
