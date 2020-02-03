@@ -41,6 +41,6 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: rabbit-server
+                host: rabbitserver
                 port: 5672
            
