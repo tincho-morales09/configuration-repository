@@ -1,0 +1,3 @@
+adapter:
+  services:
+    orderManagerUrl: http://ordermanager:8080
