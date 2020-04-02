@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    stream:
+      binders:
+        rabbit_binder:
+          environment:
+            spring:
+              rabbitmq:
+                host: rabbitserver
+                port: 5672
