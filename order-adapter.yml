@@ -1,0 +1,23 @@
+adapter:
+  endPoints:
+    salesOrderUrl: /index.php/geoapi/index/salesorder
+    remainingDispatchOrdersUrl: /index.php/geoapi/index/remainingdispatchorders
+    remainingQuantityDispatchOrders: /index.php/geoapi/index/remainingquantitydispatchorders
+    remainingDispatchOrdersFilterUrl: /index.php/geoapi/index/remainingDispatchOrdersFilters
+    isServiceOnlineUrl: /index.php/geoapi/index/isserviceonline
+    changeStatusUrl: /index.php/geoapi/index/changestatus
+    replaceDispatchUrl: /index.php/geoapi/index/replaceDispatch
+    
+  services:
+    orderManagerUrl: http://localhost:8080
+
+feign:
+  client:
+    config:
+      adapter:
+        connectTimeout: 500000
+        readTimeout: 500000
+        loggerLevel: full
+
+server:
+  port: 8085
