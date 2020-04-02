@@ -1,6 +1,9 @@
 manager:
+
   enableChannels:
     exportSale: true
+    notifications: true
+    emails: true
     
   customJms:
     initialRedeliveryDelay: 1000
@@ -8,15 +11,22 @@ manager:
     maximumRedeliveries: 1
     persistenceDirectoryName: data
 
-  rest:
+  endPoints:
     importSaleUrl: /manage/order/sale
     cancelSaleUrl: /manage/order/return
-    defaultSource: ES
-    defaultPosNumber: 100
-    verification: true
-
+    replaceDispatchUrl: /service/dispatch/replace
+    confirmDispatchUrl: /service/dispatch/confirm
+   
   util:
     defaultCurrency: 1
+    defaultSource: ES
+    defaultPosNumber: 100
+
+  mapping:
+    gatewayList:
+      - MERPAY
+      - WEBPAY
+      - PAYU
 
 server:
   port: 8080
@@ -59,6 +69,16 @@ spring:
           binder: rabbit_binder
           producer:
             requiredGroups: exportSale-group
+        notifications: 
+          destination: notifications
+          binder: rabbit_binder
+          producer:
+            requiredGroups: notifications-group
+        emails: 
+          destination: emails
+          binder: rabbit_binder
+          producer:
+            requiredGroups: emails-group
       binders:
         rabbit_binder:
           type: rabbit
@@ -67,3 +87,4 @@ spring:
               rabbitmq:
                 host: localhost
                 port: 5672
+
