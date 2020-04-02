@@ -2,30 +2,17 @@ server:
   port: 8082
 
 distributor:
-  payments:
-    RECAUDADO:
+  paymentConfiguration:
+    CASH:
       paymentName: CASH
       paymentId: 1
-      needCreditCardData: false
-    MERPAY:
+    GATEWAY:
       paymentName: GATEWAY
       paymentId: 35
-      needCreditCardData: true
-    WEBPAY:
-      paymentName: GATEWAY
-      paymentId: 35
-      needCreditCardData: true
-    PAYU:
-      paymentName: GATEWAY
-      paymentId: 35
-      needCreditCardData: true
+    CARD_TO_CONFIRM:
+      paymentName: CARD_TO_CONFIRM
+      paymentid: 27
 
-  wirelessCardPayment:
-    paymentName: MOBILE_POS_CARD
-    paymentid: 27
-    needCreditCardData: true
-
-  
   defaultDiscountConfiguration:
     description: External transaction discount
     discountId: 9999
