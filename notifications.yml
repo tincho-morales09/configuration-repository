@@ -1,0 +1,87 @@
+notifications:
+
+  mapping:
+    toCollectText: RECAUDADO
+    cashText: EFE
+    debitCardText: DEB
+    creditCardText: CRE
+    
+  serviceConfiguration:
+    enabledPayments:
+      - CASH
+      - CARD
+      - CARD_TO_CONFIRM
+      - GATEWAY
+    successfulCode: 200
+    hostAddress: http://elb-difarma-backend-dev-1777393153.us-east-1.elb.amazonaws.com:8080/MTDServices/invoice/receive-payment
+    defaultStoreCode: CVCO
+    connectionMap:
+      WEBPAY: 1
+      MERPAY: 2
+      PAYU: 3
+      RECAUDADO: 4
+    paymentMap:
+      EFE: 1    
+      DEB: 2
+      CRE: 3
+    
+  customJms:
+    initialRedeliveryDelay: 3000
+    redeliveryDelay: 4000
+    maximumRedeliveries: 3
+    persistenceDirectoryName: data
+
+feign:
+  client:
+    config:
+      notifications:
+        connectTimeout: 8000
+        readTimeout: 8000
+        loggerLevel: full
+
+server:
+  port: 8086
+    
+spring:
+  activemq:
+    brokerUrl: tcp://localhost:61618?jms.dispatchAsync=true
+    pool:
+      max-connections: 10
+      enabled: true
+      idle-timeout: 30
+      max-sessions-per-connection: 500
+  jms:
+    listener:
+      concurrency: 5
+      max-concurrency: 10
+      receive-timeout: 5s
+  cloud:
+    stream:
+      rabbit:
+        bindings:
+          inputEvents:
+            consumer:
+              republish-to-dlq: true
+      bindings:
+        inputEvents:
+          destination: notifications
+          binder: rabbit_binder
+          group: notifications-group
+          consumer:
+            concurrency: 5
+            maxAttempts: 3
+            backOffInitialInterval: 2000
+            backOffMaxInterval: 2000
+        outputEvents:
+          destination: orderManager
+          binder: rabbit_binder
+          producer:
+            requiredGroups: orderManager-group
+      binders:
+        rabbit_binder:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
