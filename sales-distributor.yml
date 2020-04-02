@@ -1,8 +1,14 @@
 server:
   port: 8082
+  
+custom-feign:
+  connectionTimeoutMillis: 5000
+  readTimeoutMillis: 5000
 
 distributor:
   saleType: externalTransaction
+  defaultCadet: 1
+  serverName: server1
   
   customJms:
     initialRedeliveryDelay: 3000
@@ -10,28 +16,19 @@ distributor:
     maximumRedeliveries: 3
     persistenceDirectoryName: data
     
-  payments:
-    RECAUDADO:
+  paymentConfiguration:
+    CASH:
       paymentName: CASH
       paymentId: 1
-      needCreditCardData: false
-    MERPAY:
+    GATEWAY:
       paymentName: GATEWAY
       paymentId: 35
-      needCreditCardData: true
-    WEBPAY:
-      paymentName: GATEWAY
-      paymentId: 35
-      needCreditCardData: true
-    PAYU:
-      paymentName: GATEWAY
-      paymentId: 35
-      needCreditCardData: true
-
-  wirelessCardPayment:
-    paymentName: MOBILE_POS_CARD
-    paymentid: 27
-    needCreditCardData: true
+    CARD_TO_CONFIRM:
+      paymentName: CARD_TO_CONFIRM
+      paymentid: 27
+    CARD:
+      paymentName: CARD_TO_CONFIRM
+      paymentid: 27
   
   defaultDiscountConfiguration:
     description: External transaction discount
@@ -40,14 +37,6 @@ distributor:
   exportService:
     exportChannelName: oms
     url: /api/transaction/import
-
-feign:
-  client:
-    config:
-      defautl:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: basic
 
 spring:
   data:
